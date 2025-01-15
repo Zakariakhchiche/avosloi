@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond avec dégradé -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2A4365;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1A365D;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Cercle de fond -->
+  <circle cx="256" cy="256" r="256" fill="url(#grad)"/>
+  
+  <!-- Balance de la justice stylisée -->
+  <g transform="translate(96, 96)" fill="#FFFFFF">
+    <!-- Barre supérieure -->
+    <rect x="32" y="32" width="256" height="32" rx="16" fill="#FFFFFF"/>
+    
+    <!-- Pilier central -->
+    <rect x="144" y="64" width="32" height="224" rx="16" fill="#FFFFFF"/>
+    
+    <!-- Plateaux de la balance -->
+    <path d="M64 128 L128 192 L0 192 Z" fill="#FFFFFF" opacity="0.9"/>
+    <path d="M256 128 L320 192 L192 192 Z" fill="#FFFFFF" opacity="0.9"/>
+    
+    <!-- Base -->
+    <rect x="96" y="288" width="128" height="32" rx="16" fill="#FFFFFF"/>
+    
+    <!-- Cercles décoratifs -->
+    <circle cx="64" cy="224" r="16" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="256" cy="224" r="16" fill="#FFFFFF" opacity="0.7"/>
+  </g>
+  
+  <!-- Effet de brillance -->
+  <circle cx="128" cy="128" r="32" fill="#FFFFFF" opacity="0.1"/>
+</svg>
