@@ -51,7 +51,7 @@ const LawyerFilters = ({ onFilterChange }) => {
             <span className="label-text">Spécialité</span>
           </label>
           <select
-            className="select select-bordered w-full"
+            className="select select-bordered w-full bg-[#2A4365] text-slate-100"
             value={specialty}
             onChange={handleSpecialtyChange}
           >
@@ -67,7 +67,7 @@ const LawyerFilters = ({ onFilterChange }) => {
             <span className="label-text">Ville</span>
           </label>
           <select
-            className="select select-bordered w-full"
+            className="select select-bordered w-full bg-[#2A4365] text-slate-100"
             value={city}
             onChange={handleCityChange}
           >
@@ -83,7 +83,7 @@ const LawyerFilters = ({ onFilterChange }) => {
             <span className="label-text">Budget (€/heure)</span>
           </label>
           <select
-            className="select select-bordered w-full"
+            className="select select-bordered w-full bg-[#2A4365] text-slate-100"
             value={priceRange}
             onChange={handlePriceRangeChange}
           >
