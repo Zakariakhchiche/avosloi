@@ -79,28 +79,27 @@ const ChatView = () => {
       </div>
 
       <div className="p-4 border-t">
-        <form className="flex flex-col sm:flex-row gap-2" onSubmit={(e) => e.preventDefault()}>
-          <textarea
-            ref={inputRef}
-            className="textarea textarea-bordered border-[#385986] flex-grow bg-[#edf0f3] resize-none leading-6"
-            value={formValue}
-            onChange={(e) => {
-              setFormValue(e.target.value);
-              e.target.style.height = "auto"; // Réinitialisation pour éviter l'expansion infinie
-              if (e.target.scrollHeight <= 200) {
-                e.target.style.height = `${e.target.scrollHeight}px`; // Ajustement dynamique
-              } else {
-                e.target.style.height = "200px"; // Fixe la hauteur maximale
-              }
-            }}
-            placeholder="Posez votre question ici..."
-            rows={1} // Commence avec une seule ligne
-            style={{ minHeight: "40px", maxHeight: "200px", overflowY: "auto" }} // Active le scroll quand maxHeight est atteint
-          />
-          <button type="submit" className="btn bg-[#385986]" disabled={!formValue}>
-            <MdSend size={20} />
-          </button>
-        </form>
+      <form className="flex flex-col sm:flex-row gap-2" 
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!formValue.trim()) return; // Évite d'envoyer des messages vides
+
+          addMessage({ role: 'user', content: formValue }); // Ajoute le message
+          setFormValue(''); // Réinitialise le champ de texte
+        }}
+      >
+        <textarea
+          ref={inputRef}
+          className="textarea textarea-bordered border-[#385986] flex-grow bg-[#edf0f3] resize-none leading-6"
+          value={formValue}
+          onChange={(e) => setFormValue(e.target.value)}
+          placeholder="Posez votre question ici..."
+        />
+        <button type="submit" className="btn bg-[#385986]" disabled={!formValue}>
+          <MdSend size={20} />
+        </button>
+      </form>
+
       </div>
 
 
