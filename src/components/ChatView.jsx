@@ -1,4 +1,3 @@
-// ChatView.jsx corrigé
 import { useState, useRef, useEffect, useContext } from 'react';
 import Message from './Message';
 import { ChatContext } from '../context/chatContext';
@@ -34,19 +33,18 @@ const ChatView = () => {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const [formValue, setFormValue] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { messages, addMessage } = useContext(ChatContext);
+  const { messages, addMessage, loading } = useContext(ChatContext);
   const [showFavorites, setShowFavorites] = useState(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, loading]);
 
   return (
     <div className="flex flex-col h-full w-full max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
       <div className="flex-none p-4 bg-neutral text-neutral-content">
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-bold">Trouvez l'avocat idéal</h2>
+          <h2 className="text-lg font-bold">Trouvez l&apos;avocat idéal</h2>
           <button onClick={() => setShowFavorites(!showFavorites)} className="btn btn-ghost btn-sm">
             {showFavorites ? 'Voir les messages' : 'Voir les favoris'}
           </button>
@@ -65,44 +63,45 @@ const ChatView = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {template.map((item, index) => (
-                  <div key={index} className="p-4 border rounded-lg shadow-sm hover:shadow-md cursor-pointer" onClick={() => setFormValue(item.prompt)}>
+                  <div key={index} className="p-4 border rounded-lg shadow-sm hover:shadow-md cursor-pointer" 
+                       onClick={() => setFormValue(item.prompt)}>
                     <p className="font-semibold">{item.title}</p>
                     <p className="text-sm text-gray-600">{item.prompt}</p>
                   </div>
                 ))}
               </div>
             )}
+
+            {/* ✅ Réintégration correcte de Thinking */}
             {loading && <Thinking />}
+            
             <div ref={messagesEndRef} />
           </div>
         )}
       </div>
 
       <div className="p-4 border-t">
-      <form className="flex flex-col sm:flex-row gap-2" 
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!formValue.trim()) return; // Évite d'envoyer des messages vides
+        <form className="flex flex-col sm:flex-row gap-2" 
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!formValue.trim()) return; // Évite d'envoyer des messages vides
 
-          addMessage({ role: 'user', content: formValue }); // Ajoute le message
-          setFormValue(''); // Réinitialise le champ de texte
-        }}
-      >
-        <textarea
-          ref={inputRef}
-          className="textarea textarea-bordered border-[#385986] flex-grow bg-[#edf0f3] resize-none leading-6"
-          value={formValue}
-          onChange={(e) => setFormValue(e.target.value)}
-          placeholder="Posez votre question ici..."
-        />
-        <button type="submit" className="btn bg-[#385986]" disabled={!formValue}>
-          <MdSend size={20} />
-        </button>
-      </form>
-
+            addMessage({ role: 'user', content: formValue }); // Ajoute le message
+            setFormValue(''); // Réinitialise le champ de texte
+          }}
+        >
+          <textarea
+            ref={inputRef}
+            className="textarea textarea-bordered border-[#385986] flex-grow bg-[#edf0f3] resize-none leading-6"
+            value={formValue}
+            onChange={(e) => setFormValue(e.target.value)}
+            placeholder="Posez votre question ici..."
+          />
+          <button type="submit" className="btn bg-[#385986]" disabled={!formValue}>
+            <MdSend size={20} />
+          </button>
+        </form>
       </div>
-
-
     </div>
   );
 };

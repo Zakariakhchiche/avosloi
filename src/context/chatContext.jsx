@@ -7,50 +7,47 @@ import PropTypes from 'prop-types';
  */
 export const ChatContext = createContext();
 
-/**
- * ChatContextProvider is a functional component that serves as a provider for the ChatContext.
- * It provides the ChatContext to the components within its subtree.
- *
- * @param {Object} props - The properties passed to the component.
- * @returns {JSX.Element} A ChatContext.Provider element.
- */
 export const ChatContextProvider = ({ children }) => {
   const [messages, setMessages] = useState(() => {
     const savedMessages = localStorage.getItem('chatMessages');
     return savedMessages ? JSON.parse(savedMessages) : [];
   });
 
-  // Sauvegarder les messages dans le localStorage
+  const [loading, setLoading] = useState(false); // ✅ Ajout de l'état de chargement
+
   useEffect(() => {
     localStorage.setItem('chatMessages', JSON.stringify(messages));
   }, [messages]);
 
   const addMessage = async (message) => {
     setMessages(prevMessages => [...prevMessages, message]);
-  
-    // Si le message est de l'utilisateur, envoyer la requête à ChatGPT
+
     if (message.role === 'user') {
+      setLoading(true); // ✅ Active l'indicateur "Thinking"
+
       try {
-        const responseMessage = await fetchChatGPTResponse(message.content);
+        const responseMessage = await fetchDeepSeekResponse(message.content);
         setMessages(prevMessages => [...prevMessages, responseMessage]);
       } catch (error) {
-        console.error("Erreur lors de la requête à ChatGPT :", error);
+        console.error("Erreur lors de la requête à DeepSeek :", error);
         setMessages(prevMessages => [
           ...prevMessages,
           { role: 'assistant', content: "Une erreur s'est produite, veuillez réessayer." }
         ]);
+      } finally {
+        setLoading(false); // ✅ Désactive "Thinking"
       }
     }
   };
 
-  const fetchChatGPTResponse = async (userMessage) => {
+  const fetchDeepSeekResponse = async (userMessage) => {
     const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY;
-  
+
     if (!DEEPSEEK_API_KEY) {
       console.error("Clé API DeepSeek manquante !");
       return { role: "assistant", content: "Erreur : Clé API manquante." };
     }
-  
+
     try {
       const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
         method: "POST",
@@ -66,13 +63,13 @@ export const ChatContextProvider = ({ children }) => {
           ]
         })
       });
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(`Erreur API DeepSeek: ${data.error?.message || response.statusText}`);
       }
-  
+
       return {
         role: "assistant",
         content: data.choices[0].message.content
@@ -85,22 +82,9 @@ export const ChatContextProvider = ({ children }) => {
       };
     }
   };
-  
-  
-  
-
-  const clearMessages = () => {
-    setMessages([]);
-    localStorage.removeItem('chatMessages');
-  };
 
   return (
-    <ChatContext.Provider value={{ 
-      messages, 
-      setMessages, 
-      addMessage,
-      clearMessages
-    }}>
+    <ChatContext.Provider value={{ messages, setMessages, addMessage, loading }}>
       {children}
     </ChatContext.Provider>
   );
