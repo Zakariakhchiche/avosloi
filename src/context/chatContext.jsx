@@ -13,7 +13,7 @@ export const ChatContextProvider = ({ children }) => {
     return savedMessages ? JSON.parse(savedMessages) : [];
   });
 
-  const [loading, setLoading] = useState(false); // ✅ Ajout de l'état de chargement
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('chatMessages', JSON.stringify(messages));
@@ -23,7 +23,7 @@ export const ChatContextProvider = ({ children }) => {
     setMessages(prevMessages => [...prevMessages, message]);
 
     if (message.role === 'user') {
-      setLoading(true); // ✅ Active l'indicateur "Thinking"
+      setLoading(true);
 
       try {
         const responseMessage = await fetchDeepSeekResponse(message.content);
@@ -35,7 +35,7 @@ export const ChatContextProvider = ({ children }) => {
           { role: 'assistant', content: "Une erreur s'est produite, veuillez réessayer." }
         ]);
       } finally {
-        setLoading(false); // ✅ Désactive "Thinking"
+        setLoading(false);
       }
     }
   };

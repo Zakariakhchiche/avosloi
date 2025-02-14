@@ -72,9 +72,8 @@ const ChatView = () => {
               </div>
             )}
 
-            {/* ✅ Réintégration correcte de Thinking */}
             {loading && <Thinking />}
-            
+
             <div ref={messagesEndRef} />
           </div>
         )}
@@ -84,10 +83,10 @@ const ChatView = () => {
         <form className="flex flex-col sm:flex-row gap-2" 
           onSubmit={(e) => {
             e.preventDefault();
-            if (!formValue.trim()) return; // Évite d'envoyer des messages vides
+            if (!formValue.trim()) return;
 
-            addMessage({ role: 'user', content: formValue }); // Ajoute le message
-            setFormValue(''); // Réinitialise le champ de texte
+            addMessage({ role: 'user', content: formValue });
+            setFormValue('');
           }}
         >
           <textarea
